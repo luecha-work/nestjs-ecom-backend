@@ -1,0 +1,4 @@
+{
+  "video_url": "http://localhost:1000/api/common-upload/upload-video/32a1a482dccbd78e445bcfcb2df9e56f.mp4",
+  "video_name": "32a1a482dccbd78e445bcfcb2df9e56f.mp4"
+}
