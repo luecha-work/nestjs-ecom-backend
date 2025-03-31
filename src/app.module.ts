@@ -49,7 +49,7 @@ import { ScheduleModule } from '@nestjs/schedule';
     // }),
     TypeOrmModule.forRoot({
       type: 'postgres',
-      url: 'postgresql://ep-crimson-glitter-a55dohj9.us-east-2.aws.neon.tech:5432/neondb',
+      url: 'postgresql://neondb_owner:npg_jLhUE21Mqbnu@ep-crimson-glitter-a55dohj9.us-east-2.aws.neon.tech/neondb?sslmode=require',
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       autoLoadEntities: true,
       synchronize: true,
