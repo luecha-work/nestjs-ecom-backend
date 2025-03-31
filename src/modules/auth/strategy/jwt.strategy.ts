@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { Request } from 'express';
@@ -26,9 +26,14 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       secretOrKey: configService.get('JWT_SECRET'),
     });
   }
+  
 
   // get token with Cookei
   private static extractJWTFromCookie(req: Request): string | null {
+    const logger = new Logger();
+
+    logger.debug('req.cookies', JSON.stringify(req.cookies));
+    logger.debug('req?.cookies.access_token', JSON.stringify(req?.cookies.access_token));
     if (req?.cookies && req?.cookies.access_token) {
       return req?.cookies.access_token;
     }
@@ -36,8 +41,12 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: JwtPayload) {
+    const logger = new Logger();
     const { id } = payload;
     const user: Users = await this.userService.findOne({ id });
+
+    logger.debug('user', JSON.stringify(user));
+    logger.debug('user id', id);
 
     if (!user) {
       throw new UnauthorizedException();

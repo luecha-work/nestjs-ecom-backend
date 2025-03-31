@@ -153,7 +153,7 @@ export class AuthController {
 
       const jwt = await this.jwtService.signAsync({ id: user.id });
 
-      response.cookie('access_token', jwt, { httpOnly: true, secure: true });
+      response.cookie('access_token', jwt, { httpOnly: false, secure: true });
 
       return new BaseResultData('200', user, jwt, 'Success');
     } catch (error) {
