@@ -28,7 +28,6 @@ RUN yarn install --frozen-lockfile --production
 
 # Copy built application from build stage
 COPY --from=build /app/dist ./dist
-COPY --from=build /app/node_modules/.prisma ./node_modules/.prisma
 
 # Copy necessary files for uploads
 RUN mkdir -p uploads/profile uploads/products uploads/payment uploads/videos
