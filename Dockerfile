@@ -29,6 +29,8 @@ RUN yarn install --production
 # Copy built application
 COPY --from=build /app/dist ./dist
 
+COPY tambons.json ./tambons.json
+
 # Create upload directories
 RUN mkdir -p uploads/profile uploads/products uploads/payment uploads/videos
 
