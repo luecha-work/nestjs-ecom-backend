@@ -1,22 +1,39 @@
 version: '3.9'
+
 services:
   backend:
     build: .
+    container_name: nestjs_app
+    restart: always
     ports:
       - 1000:1000
     volumes:
       - .:/app
     depends_on:
-      - db
+      db:
+        condition: service_healthy # รอให้ PostgreSQL พร้อมก่อน
+    environment:
+      DATABASE_URL: postgres://root:123456@db:5432/ecom
+    command: ["sh", "-c", "npm install && npm run start"]
+
   db:
-    image: postgres:latest # เปลี่ยนรูปภาพ Docker ไปเป็น PostgreSQL
+    image: postgres:latest
+    container_name: postgres_db
     restart: always
     environment:
-      POSTGRES_DB: ecom # กำหนดชื่อฐานข้อมูล
-      POSTGRES_USER: root # กำหนดผู้ใช้
-      POSTGRES_PASSWORD: 123456 # กำหนดรหัสผ่าน
+      POSTGRES_DB: ecom
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: 123456
     volumes:
-      - .pgdata:/var/lib/postgresql/data # เปลี่ยนชื่อโฟลเดอร์ที่จะใช้เก็บข้อมูล PostgreSQL
+      - pgdata:/var/lib/postgresql/data
     ports:
       - 5432:5432
-    command: ['postgres', '-c', 'max_connections=200'] # เพิ่มคำสั่งนี้
+    command: ['postgres', '-c', 'max_connections=200']
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "root"]
+      interval: 10s
+      retries: 5
+      timeout: 5s
+
+volumes:
+  pgdata:
