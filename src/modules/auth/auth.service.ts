@@ -9,7 +9,11 @@ export class AuthService {
   async userId(request: Request): Promise<number> {
     const cookie = request.cookies['access_token'];
 
+    console.log('cookie', cookie);
+
     const data = await this.jwtService.verifyAsync(cookie);
+
+    console.log('data', JSON.stringify(data));
 
     return data['id'];
   }

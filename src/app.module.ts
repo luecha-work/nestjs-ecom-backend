@@ -31,34 +31,27 @@ import { ScheduleModule } from '@nestjs/schedule';
       validationSchema: configValidationSchema,
     }),
     ScheduleModule.forRoot(),
-    // TypeOrmModule.forRootAsync({
-    //   imports: [ConfigModule],
-    //   inject: [ConfigService],
-    //   useFactory: async (configService: ConfigService) => ({
-    //     type: 'postgres',
-    //     host: configService.get('DB_HOST'),
-    //     port: configService.get('DB_PORT'),
-    //     username: configService.get('DB_USERNAME'),
-    //     password: configService.get('DB_PASSWORD'),
-    //     database: configService.get('DB_DATABASE'),
-    //     autoLoadEntities: true,
-    //     synchronize: true,
-    //     // logging: true, //show query
-    //     ssl: true,
-    //   }),
-    // }),
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      url: 'postgresql://neondb_owner:npg_jLhUE21Mqbnu@ep-crimson-glitter-a55dohj9.us-east-2.aws.neon.tech/neondb?sslmode=require',
-      entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      autoLoadEntities: true,
-      synchronize: true,
-      ssl: true,
-      extra: {
-        ssl: {
-          rejectUnauthorized: false
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => ({
+        type: 'postgres',
+        url: 'postgresql://neondb_owner:npg_jLhUE21Mqbnu@ep-crimson-glitter-a55dohj9.us-east-2.aws.neon.tech/neondb?sslmode=require',
+        // host: configService.get('DB_HOST'),
+        // port: configService.get('DB_PORT'),
+        // username: configService.get('DB_USERNAME'),
+        // password: configService.get('DB_PASSWORD'),
+        // database: configService.get('DB_DATABASE'),
+        autoLoadEntities: true,
+        synchronize: true,
+        // logging: true, //show query
+        ssl: true,
+        extra: {
+          ssl: {
+            rejectUnauthorized: false
+          }
         }
-      }
+      }),
     }),
     AuthModule,
     CommonModule,

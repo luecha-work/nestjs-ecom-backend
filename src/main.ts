@@ -8,7 +8,7 @@ import { SwaggerDoc } from './doc/swagger.doc';
 
 async function bootstrap() {
   const port = process.env.PORT;
-  const origin_cors_port = process.env.ORIGIN_CORS_PORT;
+  // const origin_cors_port = process.env.ORIGIN_CORS_PORT;
 
   const logger = new Logger();
 
@@ -18,14 +18,14 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   app.use(cookieParser());
   app.enableCors({
-    origin: `https://nextjs-ecom-fontend.vercel.app`,
+    origin: `${process.env.CORS_ORIGIN}`,
     credentials: true,
   });
   new SwaggerDoc().setupDocs(app, port);
 
   await app.listen(port);
   logger.log(
-    `Application listening on port ${port}, Origin cors port on ${origin_cors_port}`,
+    `Application listening on port ${port}, Origin cors url on ${process.env.CORS_ORIGIN}`,
   );
 }
 
