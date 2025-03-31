@@ -3,10 +3,10 @@ FROM node:18.17.1-alpine AS build
 
 WORKDIR /app
 
-# Copy package.json and yarn.lock (ถ้ามี)
+# Copy package.json and yarn.lock
 COPY package.json yarn.lock* ./
 
-# ติดตั้ง dependencies
+# Install dependencies
 RUN yarn install --frozen-lockfile
 
 # Copy source code
@@ -23,20 +23,19 @@ WORKDIR /app
 # Copy package.json and yarn.lock
 COPY package.json yarn.lock* ./
 
-# ติดตั้งเฉพาะ production dependencies
+# Install production dependencies only
 RUN yarn install --frozen-lockfile --production
 
-# Copy built application from build stage
+# Copy built application
 COPY --from=build /app/dist ./dist
 
-# Copy necessary files for uploads
+# Create upload directories
 RUN mkdir -p uploads/profile uploads/products uploads/payment uploads/videos
 
-# Set NODE_ENV to production
+# Environment variables
 ENV NODE_ENV=production
 
-# Expose the port
 EXPOSE 1000
 
-# Run application
-CMD ["node", "dist/main"]
+# ใช้ start:prod แทน - ตามที่ระบุในไฟล์ package.json
+CMD ["yarn", "start:prod"]
