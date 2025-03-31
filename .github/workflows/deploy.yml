@@ -25,5 +25,13 @@ jobs:
 
       - name: Set up Docker
         run: |
-          docker-compose down
-          docker-compose up -d --build
+          docker system prune -f
+          docker buildx install
+
+      - name: Run Docker Compose
+        run: |
+          docker compose down || true
+          docker compose up -d --build
+
+      - name: Check Docker Logs (Debugging)
+        run: docker compose logs backend || true
