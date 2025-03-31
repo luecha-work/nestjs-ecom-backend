@@ -31,21 +31,33 @@ import { ScheduleModule } from '@nestjs/schedule';
       validationSchema: configValidationSchema,
     }),
     ScheduleModule.forRoot(),
-    TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: async (configService: ConfigService) => ({
-        type: 'postgres',
-        host: configService.get('DB_HOST'),
-        port: configService.get('DB_PORT'),
-        username: configService.get('DB_USERNAME'),
-        password: configService.get('DB_PASSWORD'),
-        database: configService.get('DB_DATABASE'),
-        autoLoadEntities: true,
-        synchronize: true,
-        // logging: true, //show query
-        ssl: true,
-      }),
+    // TypeOrmModule.forRootAsync({
+    //   imports: [ConfigModule],
+    //   inject: [ConfigService],
+    //   useFactory: async (configService: ConfigService) => ({
+    //     type: 'postgres',
+    //     host: configService.get('DB_HOST'),
+    //     port: configService.get('DB_PORT'),
+    //     username: configService.get('DB_USERNAME'),
+    //     password: configService.get('DB_PASSWORD'),
+    //     database: configService.get('DB_DATABASE'),
+    //     autoLoadEntities: true,
+    //     synchronize: true,
+    //     // logging: true, //show query
+    //     ssl: true,
+    //   }),
+    // }),
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      url: 'postgresql://ep-crimson-glitter-a55dohj9.us-east-2.aws.neon.tech:5432/neondb?sslmode=no-verify&user=neondb_owner&password=npg_jLhUE21Mqbnu',
+      entities: [__dirname + '/**/*.entity{.ts,.js}'],
+      autoLoadEntities: true,
+      synchronize: true,
+      extra: {
+        ssl: {
+          rejectUnauthorized: false
+        }
+      }
     }),
     AuthModule,
     CommonModule,
