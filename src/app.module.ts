@@ -44,9 +44,7 @@ import { ScheduleModule } from '@nestjs/schedule';
         autoLoadEntities: true,
         synchronize: true,
         // logging: true, //show query
-        ssl: {
-          rejectUnauthorized: false
-        }
+        ssl: true,
       }),
     }),
     AuthModule,
