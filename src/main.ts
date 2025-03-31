@@ -18,7 +18,7 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   app.use(cookieParser());
   app.enableCors({
-    origin: `http://localhost:${origin_cors_port}`,
+    origin: `*`,
     credentials: true,
   });
   new SwaggerDoc().setupDocs(app, port);
