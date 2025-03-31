@@ -3,17 +3,23 @@ FROM node:18.17.1-alpine AS build
 
 WORKDIR /app
 
-# Copy package.json and yarn.lock
+# Copy package.json and yarn.lock (if exists)
 COPY package.json yarn.lock* ./
 
-# Install dependencies
-RUN yarn install --frozen-lockfile
+# Install ALL dependencies (including devDependencies)
+RUN yarn install
 
 # Copy source code
 COPY . .
 
-# Build application
+# Debug - show files before build
+RUN echo "Files before build:" && ls -la
+
+# Run build
 RUN yarn build
+
+# Debug - show files after build
+RUN echo "Files after build:" && ls -la && echo "Contents of dist:" && ls -la dist/ || echo "dist directory not found!"
 
 # Production stage
 FROM node:18.17.1-alpine
@@ -23,8 +29,8 @@ WORKDIR /app
 # Copy package.json and yarn.lock
 COPY package.json yarn.lock* ./
 
-# Install production dependencies only
-RUN yarn install --frozen-lockfile --production
+# Install ONLY production dependencies
+RUN yarn install --production
 
 # Copy built application
 COPY --from=build /app/dist ./dist
@@ -32,10 +38,13 @@ COPY --from=build /app/dist ./dist
 # Create upload directories
 RUN mkdir -p uploads/profile uploads/products uploads/payment uploads/videos
 
-# Environment variables
+# Debug - show files in production image
+RUN echo "Files in production image:" && ls -la && echo "Contents of dist:" && ls -la dist/ || echo "dist directory not found!"
+
+# Set environment variables
 ENV NODE_ENV=production
 
 EXPOSE 1000
 
-# ใช้ start:prod แทน - ตามที่ระบุในไฟล์ package.json
-CMD ["yarn", "start:prod"]
+# Use the same command as in package.json
+CMD ["node", "dist/main"]
