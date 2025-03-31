@@ -18,7 +18,7 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   app.use(cookieParser());
   app.enableCors({
-    origin: `*`,
+    origin: `https://nextjs-ecom-fontend.vercel.app`,
     credentials: true,
   });
   new SwaggerDoc().setupDocs(app, port);
